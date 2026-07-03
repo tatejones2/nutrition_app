@@ -20,7 +20,7 @@ export function OnboardingPage() {
   return (
     <main className="onboarding-page">
       <div className="stepper">{steps.map((label, index) => <span key={label} className={index <= step ? "active" : ""}>{label}</span>)}</div>
-      {step === 0 && <OnboardingStep title="Start with your body metrics" description="These estimates help set a practical athlete fueling baseline.">
+      {step === 0 && <OnboardingStep title="Quick check: what is your situation?" description="Start with the basics so FuelIQ can estimate a practical athlete fueling baseline.">
         <div className="form-grid">
           <label>Name<input value={profile.fullName} onChange={(e) => field("fullName", e.target.value)} /></label>
           <label>Age<input type="number" value={profile.age} onChange={(e) => field("age", Number(e.target.value))} /></label>
@@ -29,21 +29,21 @@ export function OnboardingPage() {
           <label>Sex<input value={profile.sex} onChange={(e) => field("sex", e.target.value)} /></label>
         </div>
       </OnboardingStep>}
-      {step === 1 && <OnboardingStep title="Tell FuelIQ your sport context" description="Training demand changes meal timing and carb needs.">
+      {step === 1 && <OnboardingStep title="What sport and training level are you in?" description="Training demand changes meal timing, carbs, hydration, and recovery needs.">
         <div className="form-grid">
           <label>Sport<input value={profile.sport} onChange={(e) => field("sport", e.target.value)} /></label>
           <label>Position / event<input value={profile.position} onChange={(e) => field("position", e.target.value)} /></label>
           <label>Training level<select value={profile.trainingLevel} onChange={(e) => field("trainingLevel", e.target.value as AthleteProfile["trainingLevel"])}><option>High school</option><option>College</option><option>Elite amateur</option><option>Professional</option><option>Recreational competitive</option></select></label>
         </div>
       </OnboardingStep>}
-      {step === 2 && <OnboardingStep title="Set the performance goal" description="Small, sustainable changes protect training quality.">
+      {step === 2 && <OnboardingStep title="What goal should your nutrition support?" description="Small, sustainable changes protect training quality.">
         <div className="form-grid">
           <label>Main goal<input value={profile.primaryGoal} onChange={(e) => field("primaryGoal", e.target.value)} /></label>
           <label>Goal weight<input type="number" value={profile.goalWeightLbs} onChange={(e) => field("goalWeightLbs", Number(e.target.value))} /></label>
           <label>Desired rate<input value={profile.desiredWeightChangeRate} onChange={(e) => field("desiredWeightChangeRate", e.target.value)} /></label>
         </div>
       </OnboardingStep>}
-      {step === 3 && <OnboardingStep title="Map food preferences" description="FuelIQ will avoid allergens, restrictions, disliked foods, and foods you reject later.">
+      {step === 3 && <OnboardingStep title="What can and cannot be in your plan?" description="FuelIQ will avoid allergens, restrictions, disliked foods, and foods you reject later.">
         <div className="form-grid">
           <PreferenceTagInput label="Allergies" values={preferences.allergies} onChange={(v) => setPreferences({ ...preferences, allergies: v })} placeholder="Press enter to add" />
           <PreferenceTagInput label="Liked foods" values={preferences.likedFoods} onChange={(v) => setPreferences({ ...preferences, likedFoods: v })} placeholder="rice bowls" />
@@ -51,7 +51,7 @@ export function OnboardingPage() {
           <PreferenceTagInput label="Dietary restrictions" values={preferences.dietaryRestrictions} onChange={(v) => setPreferences({ ...preferences, dietaryRestrictions: v })} placeholder="vegetarian" />
         </div>
       </OnboardingStep>}
-      {step === 4 && <OnboardingStep title="Dial in your daily reality" description="Recommendations should fit your budget, cooking access, schedule, sleep, and hydration habits.">
+      {step === 4 && <OnboardingStep title="What does your daily life look like?" description="Recommendations should fit your budget, cooking access, schedule, sleep, and hydration habits.">
         <div className="form-grid">
           <label>Meal frequency<input value={preferences.mealFrequencyPreference} onChange={(e) => setPreferences({ ...preferences, mealFrequencyPreference: e.target.value })} /></label>
           <label>Cooking access<input value={preferences.cookingAccess} onChange={(e) => setPreferences({ ...preferences, cookingAccess: e.target.value })} /></label>

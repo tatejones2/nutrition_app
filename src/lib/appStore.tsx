@@ -13,6 +13,7 @@ const STORAGE_KEY = "fueliq-athlete-state";
 interface AppStoreValue {
   state: AppState;
   today: string;
+  createAthleteAccount: (email: string) => void;
   loginAsAthlete: () => void;
   loginAsAdmin: () => void;
   updateProfile: (profile: AthleteProfile) => void;
@@ -29,6 +30,37 @@ interface AppStoreValue {
 }
 
 const AppStoreContext = createContext<AppStoreValue | undefined>(undefined);
+
+const newAthleteProfile = (email: string): AthleteProfile => ({
+  id: crypto.randomUUID(),
+  fullName: email.split("@")[0] || "New Athlete",
+  age: 18,
+  sex: "",
+  heightInches: 70,
+  currentWeightLbs: 170,
+  sport: "",
+  position: "",
+  trainingLevel: "High school",
+  primaryGoal: "Improve performance",
+  goalWeightLbs: 170,
+  desiredWeightChangeRate: "Maintain for now"
+});
+
+const newAthletePreferences = (): UserPreferences => ({
+  dietaryRestrictions: [],
+  allergies: [],
+  likedFoods: [],
+  dislikedFoods: [],
+  avoidedFoods: [],
+  mealFrequencyPreference: "3 meals + 1 snack",
+  cookingAccess: "",
+  budgetLevel: "Moderate",
+  diningHallAccess: false,
+  supplements: [],
+  sleepHabit: "",
+  hydrationHabit: "",
+  recoveryNotes: ""
+});
 
 function loadState(): AppState {
   const raw = localStorage.getItem(STORAGE_KEY);
@@ -56,6 +88,24 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     () => ({
       state,
       today,
+      createAthleteAccount: (email) =>
+        commit((current) => {
+          const profile = newAthleteProfile(email);
+          const preferences = newAthletePreferences();
+          return {
+            ...current,
+            authUser: { id: profile.id, email, role: "athlete" },
+            profile,
+            preferences,
+            goal: estimateTargets(profile, []),
+            scheduleItems: [],
+            foodLogs: [],
+            mealRecommendations: [],
+            aiMessages: [],
+            aiInsights: [],
+            onboardingComplete: false
+          };
+        }),
       loginAsAthlete: () => commit((current) => ({ ...current, authUser: { id: "demo-athlete", email: "athlete@fueliq.demo", role: "athlete" }, onboardingComplete: true })),
       loginAsAdmin: () => commit((current) => ({ ...current, authUser: { id: "admin-user", email: "admin@fueliq.demo", role: "admin" }, onboardingComplete: true })),
       updateProfile: (profile) => commit((current) => ({ ...current, profile, goal: estimateTargets(profile, current.scheduleItems) })),
